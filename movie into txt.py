@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup as bs
 import sys
 import time
 
-head = {'User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36'}
+
 #BASE URL
 def basepage(wa):
     m_wish='http://movie.douban.com/people/'+user+'/wish?start='
@@ -28,28 +28,29 @@ def basepage(wa):
 
 #知道目录下有多少页,并且打开每一页获取数据
 def link_list(pageurl):
-    req=ur.Request(url=pageurl,headers=head)
-    info=ur.urlopen(req)
+    info=ur.urlopen(pageurl)
     soup=bs(info)
-    t=soup.find('span',class_='thispage')['data-total-page']
-    n=0
-    t=int(t)-1
-    for i in range(t):
-        pagelist=pageurl+str(n)
-        content(pagelist) #调用content函数获取datum
-        n=n+15
-        #显示程序运行进度，但是这个只在CMD中有效OTZ
-        percent = 1.0 * i / t * 100
-        print 'complete percent:' + str(percent) + '%',
-        sys.stdout.write("\r")
-        time.sleep(0.1)
+    try:
+        t=soup.find('span',class_='thispage')['data-total-page']
+    except TypeError:
+        content(pageurl)
+    else:
+        n=0
+        t=int(t)-1
+        for i in range(t):
+            pagelist=pageurl+str(n)
+            content(pagelist)
+            n=n+15
+            #显示程序运行进度，但是这个只在CMD中有效OTZ
+            percent = 1.0 * i / t * 100
+            print 'complete percent:' + str(percent) + '%',
+            sys.stdout.write("\r")
+            time.sleep(0.1)
         
 #利用bs4库把静态的网页解析出来并挑选有用数据
 def content(html):
-    req=ur.Request(url=html,headers=head)
-    info=ur.urlopen(req)
+    info=ur.urlopen(html)
     soup=bs(info)
-    #item值是有效的数据值#
     for tag in soup.body(attrs={'class':'item'}):
         datum=open('datum.txt','a+')
         title=tag.em.string.strip()
@@ -69,13 +70,10 @@ def content(html):
     
 
 #运行
-print 'ECUST2014学年第二学期Python程序设计课程大作业','\n','这是一个用以获取用户豆瓣数据的爬虫，使得用户可以进行数据的本地备份。'
+print '这是一个用以获取用户豆瓣数据的爬虫，使得用户可以进行数据的本地备份。'
 user=raw_input('Please input your DB user name:')
 wanted=raw_input('Please input what you want to sync:(do,wish,collect)')
-grabbing = True
-#减速#
-while grabbing:
-    time.sleep(0.001)
+
     
 basepage(wanted)
 

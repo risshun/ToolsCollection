@@ -65,7 +65,7 @@ def content(html):
         title=title.encode('utf-8')
         url=url.encode('utf-8')
         date=date.encode('utf-8')
-        print >> datum,url,'  ',date,'  ','《',title,'》','  ',comment
+        print >> datum,url,',',date,',',title,',',comment
         datum.close()
     
 

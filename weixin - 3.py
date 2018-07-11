@@ -3,7 +3,7 @@
 # coding=utf-8
 
 import os
-import urllib, urllib2
+import urllib
 import re
 import cookielib
 import time
@@ -46,8 +46,8 @@ def getUUID():
         '_': int(time.time()),
     }
 
-    request = urllib2.Request(url = url, data = urllib.urlencode(params))
-    response = urllib2.urlopen(request)
+    request = urllib.Request(url = url, data = urllib.urlencode(params))
+    response = urllib.urlopen(request)
     data = response.read()
 
     # print data
@@ -73,8 +73,8 @@ def showQRImage():
         '_': int(time.time()),
     }
 
-    request = urllib2.Request(url = url, data = urllib.urlencode(params))
-    response = urllib2.urlopen(request)
+    request = urllib.Request(url = url, data = urllib.urlencode(params))
+    response = urllib.urlopen(request)
 
     tip = 1
 
@@ -96,8 +96,8 @@ def waitForLogin():
 
     url = 'https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?tip=%s&uuid=%s&_=%s' % (tip, uuid, int(time.time()))
 
-    request = urllib2.Request(url = url)
-    response = urllib2.urlopen(request)
+    request = urllib.Request(url = url)
+    response = urllib.urlopen(request)
     data = response.read()
     
     # print data
@@ -126,8 +126,8 @@ def waitForLogin():
 def login():
     global skey, wxsid, wxuin, pass_ticket, BaseRequest
 
-    request = urllib2.Request(url = redirect_uri)
-    response = urllib2.urlopen(request)
+    request = urllib.Request(url = redirect_uri)
+    response = urllib.urlopen(request)
     data = response.read()
 
     # print data
@@ -178,9 +178,9 @@ def webwxinit():
         'BaseRequest': BaseRequest
     }
 
-    request = urllib2.Request(url = url, data = json.dumps(params))
+    request = urllib.Request(url = url, data = json.dumps(params))
     request.add_header('ContentType', 'application/json; charset=UTF-8')
-    response = urllib2.urlopen(request)
+    response = urllib.urlopen(request)
     data = response.read()
 
     if DEBUG == True:
@@ -209,9 +209,9 @@ def webwxgetcontact():
     
     url = base_uri + '/webwxgetcontact?pass_ticket=%s&skey=%s&r=%s' % (pass_ticket, skey, int(time.time()))
 
-    request = urllib2.Request(url = url)
+    request = urllib.Request(url = url)
     request.add_header('ContentType', 'application/json; charset=UTF-8')
-    response = urllib2.urlopen(request)
+    response = urllib.urlopen(request)
     data = response.read()
 
     if DEBUG == True:
@@ -253,9 +253,9 @@ def createChatroom(UserNames):
         'Topic': '',
     }
 
-    request = urllib2.Request(url = url, data = json.dumps(params))
+    request = urllib.Request(url = url, data = json.dumps(params))
     request.add_header('ContentType', 'application/json; charset=UTF-8')
-    response = urllib2.urlopen(request)
+    response = urllib.urlopen(request)
     data = response.read()
 
     # print data
@@ -282,9 +282,9 @@ def deleteMember(ChatRoomName, UserNames):
         'DelMemberList': ','.join(UserNames),
     }
 
-    request = urllib2.Request(url = url, data = json.dumps(params))
+    request = urllib.Request(url = url, data = json.dumps(params))
     request.add_header('ContentType', 'application/json; charset=UTF-8')
-    response = urllib2.urlopen(request)
+    response = urllib.urlopen(request)
     data = response.read()
 
     # print data
@@ -308,9 +308,9 @@ def addMember(ChatRoomName, UserNames):
         'AddMemberList': ','.join(UserNames),
     }
 
-    request = urllib2.Request(url = url, data = json.dumps(params))
+    request = urllib.Request(url = url, data = json.dumps(params))
     request.add_header('ContentType', 'application/json; charset=UTF-8')
-    response = urllib2.urlopen(request)
+    response = urllib.urlopen(request)
     data = response.read()
 
     # print data
@@ -330,8 +330,8 @@ def addMember(ChatRoomName, UserNames):
 
 def main():
 
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookielib.CookieJar()))
-    urllib2.install_opener(opener)
+    opener = urllib.build_opener(urllib.HTTPCookieProcessor(cookielib.CookieJar()))
+    urllib.install_opener(opener)
     
     if getUUID() == False:
         print('获取uuid失败')
@@ -375,7 +375,7 @@ def main():
         print('第%s组...') % (i + 1)
         print(', '.join(NickNames))
         print('回车键继续...')
-        raw_input('say soemthing:')
+        input('say soemthing:')
 
         # 新建群组/添加成员
         if ChatRoomName == '':
@@ -429,9 +429,9 @@ if __name__ == '__main__' :
 
     print('本程序的查询结果可能会引起一些心理上的不适,请小心使用...')
     print('回车键继续...')
-    raw_input('say something:')
+    input('say something:')
 
     main()
 
     print('回车键结束')
-    raw_input('say something:')
+    input('say something:')

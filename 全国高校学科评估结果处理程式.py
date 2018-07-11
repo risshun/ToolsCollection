@@ -26,7 +26,7 @@ def read_data(file_name):
 
 
 def main():
-    pprint(read_data(r"C:\Users\DannyVim\Desktop\全国高校学科评估结果.txt"))
+    pprint(read_data(r"D:/Github/ToolsCollection/全国高校学科评估结果.txt"))
 
 
 if __name__ == '__main__':

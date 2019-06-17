@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         豆瓣读书导出工具
+// @name         豆瓣读书&电影导出工具
 // @namespace    https://kisexu.com/
 // @version      0.1
-// @description  原描述为：“将豆瓣已看电影导出为csv文件。启用本脚本，进入豆瓣个人页面后，在『我看』部分会有一链接『导出看过电影』，点击即可。无需登录，支持导出任意用户已看电影。”本代码仅仅是将其修改为用于豆瓣读书的导出。
+// @description  原描述为：“将豆瓣已看电影导出为csv文件。启用本脚本，进入豆瓣个人页面后，在『我看』部分会有一链接『导出看过电影』，点击即可。无需登录，支持导出任意用户已看电影。”本代码仅仅是将其添加了豆瓣读书的导出。
 // @author       KiseXu
 // @copyright 2018, KiseXu (https://kisexu.com)
 // @license MIT

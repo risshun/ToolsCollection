@@ -7,6 +7,7 @@
 // @copyright 2018, KiseXu (https://kisexu.com)
 // @license MIT
 // @match        https://book.douban.com/people/*/collect*
+// @match        https://movie.douban.com/people/*/collect*
 // @match        https://www.douban.com/people/*
 // @require      https://unpkg.com/dexie@latest/dist/dexie.js
 // @grant        none
@@ -23,11 +24,18 @@
     if (location.href.indexOf('//www.douban.com/') > -1) {
         // 加入导出按钮
         var people = location.href.slice(location.href.indexOf('/people') + 8, -1);
-        var export_link = 'https://book.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
-        $('#book .pl a:last').after('&nbsp;·&nbsp;<a href="'+export_link+'">导出读过的图书</a>')
+        var export_book_link = 'https://book.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
+        $('#book .pl a:last').after('&nbsp;·&nbsp;<a href="'+export_book_link+'">导出读过的图书</a>')
+        var export_movie_link = 'https://movie.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
+        $('#movie .pl a:last').after('&nbsp;·&nbsp;<a href="'+export_movie_link+'">导出看过的电影</a>')
     }
 
     if (location.href.indexOf('//book.douban.com/') > -1 && location.href.indexOf('export=1') > -1) {
+        // 开始导出
+        getPage();
+    }
+
+    if (location.href.indexOf('//movie.douban.com/') > -1 && location.href.indexOf('export=1') > -1) {
         // 开始导出
         getPage();
     }
@@ -39,7 +47,7 @@
 
         $('li.item').each(function(index) {
             items[index] = {
-                title: $(this).find('a').text().replace(/修改删除> 加入购书单/, '').trim(),
+                title: $(this).find('a').text().replace(/修改删除/, '').replace(/> 加入购书单/,'').trim(),
                 rating: ($(this).find('.date span').attr('class')) ? $(this).find('.date span').attr('class').slice(6, 7) : '',
                 date: $(this).find('.date').text().trim(),
                 link: $(this).find('.title a').attr('href').trim(),
@@ -88,9 +96,9 @@
 
             JSonToCSV.setDataConver({
                 data: all,
-                fileName: 'book',
+                fileName: 'Book_Movie',
                 columns: {
-                    title: ['书名', '个人评分', '打分日期', '图书链接','评论'],
+                    title: ['标题', '个人评分', '打分日期', '条目链接','评论'],
                     key: ['title', 'rating', 'date', 'link','comment']
                 }
             });

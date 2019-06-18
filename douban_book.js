@@ -1,21 +1,20 @@
 // ==UserScript==
 // @name         豆瓣读书&电影导出工具
-// @namespace    https://kisexu.com/
-// @version      0.1
-// @description  原描述为：“将豆瓣已看电影导出为csv文件。启用本脚本，进入豆瓣个人页面后，在『我看』部分会有一链接『导出看过电影』，点击即可。无需登录，支持导出任意用户已看电影。”本代码仅仅是将其添加了豆瓣读书的导出。
-// @author       KiseXu
+// @version      0.2
+// @description  原描述为：“将豆瓣已看电影导出为csv文件。启用本脚本，进入豆瓣个人页面后，在『我看』部分会有一链接『导出看过电影』，点击即可。无需登录，支持导出任意用户已看电影。”本代码仅仅是将其添加了豆瓣读书的导出。原作者保留一切权利。
+// @author       KiseXu(原作者) DannyVim(修改者)
+// @copyright 2019, DannyVim (https://github.com/DannyVim)
 // @copyright 2018, KiseXu (https://kisexu.com)
 // @license MIT
+// @updateURL    https://github.com/DannyVim/ToolsCollection/edit/master/douban_book.js
+// @downloadURL  https://github.com/DannyVim/ToolsCollection/edit/master/douban_book.js
+// @supportURL   https://github.com/DannyVim/ToolsCollection/issues
 // @match        https://book.douban.com/people/*/collect*
 // @match        https://movie.douban.com/people/*/collect*
 // @match        https://www.douban.com/people/*
 // @require      https://unpkg.com/dexie@latest/dist/dexie.js
 // @grant        none
 // ==/UserScript==
-
-// ==OpenUserJs==
-// @author KiseXu
-// ==/OpenUserJs==
 
 (function() {
     'use strict';
@@ -47,7 +46,7 @@
 
         $('li.item').each(function(index) {
             items[index] = {
-                title: $(this).find('a').text().replace(/修改删除/, '').replace(/> 加入购书单/,'').trim(),
+                title: $(this).find('a').text().replace(/修改删除/, '').replace(/加入购书单/,'').replace(/>/,'').trim(),
                 rating: ($(this).find('.date span').attr('class')) ? $(this).find('.date span').attr('class').slice(6, 7) : '',
                 date: $(this).find('.date').text().trim(),
                 link: $(this).find('.title a').attr('href').trim(),

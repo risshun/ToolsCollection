@@ -6,8 +6,8 @@
 // @copyright 2019, DannyVim (https://github.com/DannyVim)
 // @copyright 2018, KiseXu (https://kisexu.com)
 // @license MIT
-// @updateURL    https://github.com/DannyVim/ToolsCollection/edit/master/douban_book.js
-// @downloadURL  https://github.com/DannyVim/ToolsCollection/edit/master/douban_book.js
+// @updateURL    https://github.com/DannyVim/ToolsCollection/raw/master/douban_book.js
+// @downloadURL  https://github.com/DannyVim/ToolsCollection/raw/master/douban_book.js
 // @supportURL   https://github.com/DannyVim/ToolsCollection/issues
 // @match        https://book.douban.com/people/*/collect*
 // @match        https://movie.douban.com/people/*/collect*

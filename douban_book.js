@@ -9,7 +9,9 @@
 // @downloadURL  https://github.com/DannyVim/ToolsCollection/raw/master/douban_book.js
 // @supportURL   https://github.com/DannyVim/ToolsCollection/issues
 // @match        https://book.douban.com/people/*/collect*
+// @match        https://book.douban.com/people/*/wish*
 // @match        https://movie.douban.com/people/*/collect*
+// @match        https://movie.douban.com/people/*/wish*
 // @match        https://www.douban.com/people/*
 // @require      https://unpkg.com/dexie@latest/dist/dexie.js
 // @grant        none
@@ -23,19 +25,31 @@
         // 加入导出按钮
         var people = location.href.slice(location.href.indexOf('/people') + 8, -1);
         var export_book_link = 'https://book.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
-        $('#book .pl a:last').after('&nbsp;·&nbsp;<a href="'+export_book_link+'">导出读过的图书</a>')
+        $('#book > h2 > span > a:nth-child(3)').after('&nbsp;·&nbsp;<a href="'+ export_book_link +'">导出读过的图书</a>');
+        var export_book_wish_link = 'https://book.douban.com/people/' + people + '/wish?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
+        $('#book > h2 > span > a:nth-child(3)').after('&nbsp;·&nbsp;<a href="'+ export_book_wish_link +'">导出想读的图书</a>');
         var export_movie_link = 'https://movie.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
-        $('#movie .pl a:last').after('&nbsp;·&nbsp;<a href="'+export_movie_link+'">导出看过的电影</a>')
+        $('#movie .pl a:last').after('&nbsp;·&nbsp;<a href="'+ export_movie_link +'">导出看过的电影</a>');
+        var export_movie_wish_link = 'https://movie.douban.com/people/' + people + '/wish?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
+        $('#movie .pl a:last').after('&nbsp;·&nbsp;<a href="'+ export_movie_wish_link +'">导出想看的电影</a>');
     }
 
     if (location.href.indexOf('//book.douban.com/') > -1 && location.href.indexOf('export=1') > -1) {
         // 开始导出
-        getPage();
+        if (location.href.indexOf('/wish') > -1) {
+            getPage('book_wish_export');
+        } else {
+            getPage('book_export');
+        }
     }
 
     if (location.href.indexOf('//movie.douban.com/') > -1 && location.href.indexOf('export=1') > -1) {
         // 开始导出
-        getPage();
+        if (location.href.indexOf('/wish') > -1) {
+            getPage('movie_wish_export');
+        } else {
+            getPage('movie_export');
+        }
     }
 
 
@@ -57,7 +71,7 @@
     }
 
     // 采集当前页数据，保存到indexedDB
-    function getPage() {
+    function getPage(descriptor) {
         const db = new Dexie('db_export');
         db.version(1).stores({
             items: `++id, title, rating, date, link,comment`
@@ -72,7 +86,11 @@
                 next_link = next_link + '&export=1';
                 window.location.href = next_link;
             } else {
-                exportAll()
+                if (descriptor == '') {
+                    exportAll('book_movie');
+                } else {
+                    exportAll(descriptor);
+                }
             }
         }).catch(function(error) {
             console.log("Ooops: " + error);
@@ -81,7 +99,7 @@
     }
 
     // 导出所有数据到CSV
-    function exportAll() {
+    function exportAll(fileName) {
         const db = new Dexie('db_export');
         db.version(1).stores({
             items: `++id, title, rating, date, link,comment`
@@ -90,11 +108,11 @@
             all = all.map(function(item,index,array){
                 delete item.id;
                 return item;
-            })
+            });
 
             JSonToCSV.setDataConver({
                 data: all,
-                fileName: 'Book_Movie',
+                fileName: fileName,
                 columns: {
                     title: ['标题', '个人评分', '打分日期', '条目链接','评论'],
                     key: ['title', 'rating', 'date', 'link','comment']
@@ -119,11 +137,11 @@
      */
     setDataConver: function(obj) {
       var bw = this.browser();
-      if(bw['ie'] < 9) return; // IE9以下的
-      var data = obj['data'],
-          ShowLabel = typeof obj['showLabel'] === 'undefined' ? true : obj['showLabel'],
-          fileName = (obj['fileName'] || 'UserExport') + '.csv',
-          columns = obj['columns'] || {
+      if(bw.ie < 9) return; // IE9以下的
+      var data = obj.data,
+          ShowLabel = typeof obj.showLabel === 'undefined' ? true : obj.showLabel,
+          fileName = (obj.fileName || 'UserExport') + '.csv',
+          columns = obj.columns || {
               title: [],
               key: [],
               formatter: undefined
@@ -165,7 +183,7 @@
     },
     SaveAs: function(fileName, csvData) {
       var bw = this.browser();
-      if(!bw['edge'] || !bw['ie']) {
+      if(!bw.edge || !bw.ie) {
         var alink = document.createElement("a");
         alink.id = "linkDwnldLink";
         alink.href = this.getDownloadUrl(csvData);
@@ -175,7 +193,7 @@
         linkDom.click();
         document.body.removeChild(linkDom);
       }
-      else if(bw['ie'] >= 10 || bw['edge'] == 'edge') {
+      else if(bw.ie >= 10 || bw.edge == 'edge') {
         var _utf = "\uFEFF";
         var _csvData = new Blob([_utf + csvData], {
             type: 'text/csv'
@@ -204,7 +222,7 @@
       var Sys = {};
       var ua = navigator.userAgent.toLowerCase();
       var s;
-      (s = ua.indexOf('edge') !== - 1 ? Sys.edge = 'edge' : ua.match(/rv:([\d.]+)\) like gecko/)) ? Sys.ie = s[1]:
+      var dummy = (s = ua.indexOf('edge') !== - 1 ? Sys.edge = 'edge' : ua.match(/rv:([\d.]+)\) like gecko/)) ? Sys.ie = s[1]:
           (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
           (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
           (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :

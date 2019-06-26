@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         豆瓣导出工具
-// @version      0.3
-// @description  导出豆瓣上看过和读过、想看和想读的列表。
-// @author       KiseXu(原作者) DannyVim(修改者) tabokie(修改者)
+// @version      0.2
+// @description  原描述为：“将豆瓣已看电影导出为csv文件。启用本脚本，进入豆瓣个人页面后，在『我看』部分会有一链接『导出看过电影』，点击即可。无需登录，支持导出任意用户已看电影。”本代码仅仅是将其添加了豆瓣读书的导出。原作者保留一切权利。
+// @author       KiseXu(原作者) DannyVim(修改者)
 // @copyright 2018, KiseXu (https://kisexu.com)
 // @license MIT
-// @updateURL    https://github.com/DannyVim/ToolsCollection/raw/master/douban_exporter.js
-// @downloadURL  https://github.com/DannyVim/ToolsCollection/raw/master/douban_exporter.js
+// @updateURL    https://github.com/DannyVim/ToolsCollection/raw/master/douban_book.js
+// @downloadURL  https://github.com/DannyVim/ToolsCollection/raw/master/douban_book.js
 // @supportURL   https://github.com/DannyVim/ToolsCollection/issues
 // @match        https://book.douban.com/people/*/collect*
 // @match        https://book.douban.com/people/*/wish*
@@ -25,9 +25,9 @@
         // 加入导出按钮
         var people = location.href.slice(location.href.indexOf('/people') + 8, -1);
         var export_book_link = 'https://book.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
-        $('#book h2 .pl a:last').after('&nbsp;·&nbsp;<a href="'+ export_book_link +'">导出读过的图书</a>');
+        $('#book > h2 > span > a:nth-child(3)').after('&nbsp;·&nbsp;<a href="'+ export_book_link +'">导出读过的图书</a>');
         var export_book_wish_link = 'https://book.douban.com/people/' + people + '/wish?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
-        $('#book h2 .pl a:last').after('&nbsp;·&nbsp;<a href="'+ export_book_wish_link +'">导出想读的图书</a>');
+        $('#book > h2 > span > a:nth-child(3)').after('&nbsp;·&nbsp;<a href="'+ export_book_wish_link +'">导出想读的图书</a>');
         var export_movie_link = 'https://movie.douban.com/people/' + people + '/collect?start=0&sort=time&rating=all&filter=all&mode=list&export=1';
         $('#movie .pl a:last').after('&nbsp;·&nbsp;<a href="'+ export_movie_link +'">导出看过的电影</a>');
         var export_movie_wish_link = 'https://movie.douban.com/people/' + people + '/wish?start=0&sort=time&rating=all&filter=all&mode=list&export=1';

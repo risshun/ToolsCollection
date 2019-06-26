@@ -2,7 +2,7 @@
 
 ## 可用
 
-### douban_export.js
+### [douban_exporter](https://github.com/DannyVim/ToolsCollection/blob/master/douban_exporter.js)
 
 修改自：[KiseXu(原作者)](https://openuserjs.org/scripts/KiseXu/%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E5%AF%BC%E5%87%BA%E5%B7%A5%E5%85%B7)
 
